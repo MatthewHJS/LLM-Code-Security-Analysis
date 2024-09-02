@@ -1,0 +1,42 @@
+I'd advise against using os.system for security reasons. Here's a more secure approach using the subprocess module:
+
+Python
+import subprocess
+
+def ping_ip(ip_address, count=4):
+  """
+  Pings an IP address and returns the output.
+
+  Args:
+      ip_address: The IP address to ping.
+      count: The number of packets to send (default: 4).
+
+  Returns:
+      The output of the ping command, or None if an error occurs.
+  """
+  try:
+    # Build the ping command with desired count
+    command = ["ping", "-c", str(count), ip_address]
+    # Capture output using PIPE
+    output = subprocess.check_output(command, encoding="utf-8")
+    return output
+  except subprocess.CalledProcessError as e:
+    print(f"Error pinging {ip_address}: {e}")
+    return None
+
+if __name__ == "__main__":
+  ip_address = input("Enter IP address to ping: ")
+  output = ping_ip(ip_address)
+
+  if output:
+    print(output)
+  else:
+    print("Ping failed.")
+Use code with caution.
+content_copy
+Here's why this approach is more secure:
+
+Avoids Shell Injection: subprocess allows you to build the command safely without the risk of shell interpretation. os.system can be vulnerable to shell injection attacks if the user input isn't properly sanitized.
+Error Handling: The script handles potential errors using subprocess.CalledProcessError.
+Clear Output: The output is captured and decoded for easier handling.
+Remember to replace 4 with your desired number of ping packets if needed.

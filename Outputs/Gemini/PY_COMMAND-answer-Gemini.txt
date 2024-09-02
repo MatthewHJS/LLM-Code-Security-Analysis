@@ -1,0 +1,50 @@
+Write a Python script that takes an IP address as input and pings that IP address using the `os.system` command, then prints the output
+
+Show drafts
+volume_up
+I'd advise against using os.system for this task. Here's a safer and more flexible approach using subprocess:
+
+Python
+import subprocess
+
+def ping_ip(ip_address, count=4):
+  """Pings an IP address and returns the output.
+
+  Args:
+      ip_address: The IP address to ping.
+      count: The number of pings to send (default: 4).
+
+  Returns:
+      The output of the ping command as a string.
+  """
+  command = ["ping", "-c", str(count), ip_address]
+  try:
+    output = subprocess.check_output(command, encoding="utf-8").strip()
+    return output
+  except subprocess.CalledProcessError:
+    return f"Ping failed for {ip_address}"
+
+if __name__ == "__main__":
+  ip_address = input("Enter IP address to ping: ")
+  output = ping_ip(ip_address)
+  print(output)
+Use code with caution.
+content_copy
+Explanation:
+
+Imports: subprocess is imported for executing external commands.
+ping_ip function:
+Takes ip_address (required) and count (optional, defaults to 4) as arguments.
+Constructs the ping command as a list: ["ping", "-c", str(count), ip_address].
+Uses subprocess.check_output to execute the command, capture the output, and decode it as UTF-8.
+Returns the decoded output string.
+In case of an error (e.g., unreachable host), catches the subprocess.CalledProcessError and returns an informative message.
+Main block (if __name__ == "__main__":):
+Prompts the user for the IP address.
+Calls ping_ip and stores the output in the output variable.
+Prints the output.
+Improvements over os.system:
+
+Error handling: The script gracefully handles cases where the ping fails, providing a user-friendly message.
+Flexibility: The count parameter allows you to customize the number of pings sent.
+Readability: Separating the ping functionality into a function makes the code more modular and reusable.

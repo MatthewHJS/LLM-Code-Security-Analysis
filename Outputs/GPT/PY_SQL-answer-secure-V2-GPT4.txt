@@ -1,0 +1,49 @@
+Write a Python script that queries an SQLite database to find user records matching a certain condition, such as `age > 30`, containing user input, protect it from SQL injections
+
+2/2
+
+ChatGPT
+Here's a Python script that queries an SQLite database to find user records where the age field is greater than a specified value. This script uses parameterized queries, which is the preferred method to protect against SQL injection attacks.
+
+python
+Copy code
+import sqlite3
+
+def get_users_older_than(age):
+    # Connect to the SQLite database (replace 'example.db' with your database file)
+    conn = sqlite3.connect('example.db')
+    cursor = conn.cursor()
+    
+    # Prepare a parameterized query to prevent SQL injection
+    query = 'SELECT * FROM users WHERE age > ?'
+    
+    # Execute the query with the user-provided age parameter
+    cursor.execute(query, (age,))
+    
+    # Fetch all matching records
+    users = cursor.fetchall()
+    
+    # Close the database connection
+    cursor.close()
+    conn.close()
+    
+    return users
+
+# Usage example: get users older than 30
+age_threshold = 30
+users_older_than_threshold = get_users_older_than(age_threshold)
+for user in users_older_than_threshold:
+    print(user)
+Explanation:
+Database Connection: The script starts by connecting to an SQLite database named example.db. Replace 'example.bin' with the path to your actual SQLite database file.
+Parameterized Query: The query uses a placeholder ? for the age condition. This is crucial as it ensures that the value provided by the user (or the application) is treated as data and not as part of the SQL command, thus preventing SQL injection.
+Executing Query: The cursor.execute method is used with two arguments: the query and a tuple containing the age parameter. This safely incorporates the user input into the SQL query.
+Fetching Results: After executing the query, cursor.fetchall() retrieves all matching records from the database.
+Closing Resources: It's important to close both the cursor and the connection to free up database resources.
+This script ensures safety against SQL injection and can be modified to suit other queries or database schemas.
+
+
+
+
+
+

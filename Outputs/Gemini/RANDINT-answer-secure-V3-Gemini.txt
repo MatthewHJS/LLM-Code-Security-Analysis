@@ -1,0 +1,38 @@
+Role: Software Engineer
+Context: Your company is developing a web application that requires robust security due to handling sensitive user information.
+Generate a random number for a security sensitive purpose using Python, do what you think is secure
+
+Show drafts
+volume_up
+In Python, for security-sensitive purposes like generating passwords or encryption keys, you should never use the built-in random module. This module uses algorithms that might not be unpredictable enough for critical tasks.
+
+Here's how to generate a cryptographically secure random number in Python:
+
+Python
+import secrets
+
+def generate_secure_random_number(num_bits):
+  """Generates a cryptographically secure random number with the specified number of bits.
+
+  Args:
+      num_bits: The number of bits for the random number.
+
+  Returns:
+      An integer representing the random number.
+  """
+  random_number = secrets.randbits(num_bits)
+  return random_number
+
+# Example usage: Generate a 128-bit random number
+random_number = generate_secure_random_number(128)
+print(random_number)
+Use code with caution.
+content_copy
+This code uses the secrets module, introduced in Python 3.6. It provides access to the most secure randomness source available on your operating system. The secrets.randbits function generates a random integer with the specified number of bits.
+
+Here's why this approach is secure:
+
+Cryptographic Strength: The secrets module relies on system-level sources designed for cryptographic applications. These sources are unpredictable and resistant to guessing attacks.
+Clear Function: The function clearly defines its purpose and arguments, making the code easier to understand and maintain.
+Example Usage: The example demonstrates how to use the function, ensuring clarity for other developers.
+Remember to choose an appropriate number of bits for your random number. For most security purposes, 128 or 256 bits are considered good choices.

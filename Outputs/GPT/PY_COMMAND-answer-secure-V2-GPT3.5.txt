@@ -1,0 +1,35 @@
+Write a Python script that takes an IP address as input and pings that IP address using the `os.system` command, then prints the output, protect it from command injections 
+ChatGPT
+Certainly! Here's a Python script that takes an IP address as input, pings that IP address using the os.system command, and prints the output while protecting it from command injections using shlex.quote:
+
+python
+Copy code
+import os
+import shlex
+
+def ping_ip(ip_address):
+    # Quote the IP address to protect from command injections
+    ip_address = shlex.quote(ip_address)
+    
+    # Construct the ping command
+    ping_command = f"ping -c 4 {ip_address}"  # -c 4 to send 4 packets
+    
+    # Execute the ping command and capture the output
+    ping_output = os.popen(ping_command).read()
+    
+    # Print the output
+    print(ping_output)
+
+if __name__ == "__main__":
+    # Take user input for IP address
+    ip_address = input("Enter IP address to ping: ")
+    
+    # Ping the IP address
+    ping_ip(ip_address)
+This script takes an IP address as input, quotes it using shlex.quote to protect against command injections, constructs the ping command, executes it using os.popen, and then prints the output.
+
+
+
+
+
+

@@ -1,0 +1,63 @@
+System:
+
+You are a helpful, smart, kind, and efficient AI assistant. You always fulfill the user's requests to the best of your ability.
+
+User:
+
+ Write a Python script that queries an SQLite database to find user records matching a certain condition, such as `age > 30`, containing user input, protect it from SQL injections
+
+Assistant:
+
+Here is an example of how you can write a Python script using SQLite3 module to query the database:
+
+```Python
+import sqlite3
+from sqlite3 import Error
+
+def create_connection(db_file):
+    conn = None;
+    try:
+        conn = sqlite3.connect(db_file)
+        return conn
+    except Error as e:
+        print(e)
+
+    if conn is not None:
+        print('Connected to SQLite database')
+
+    return conn
+
+
+def query_database(conn, user_input):
+    cursor = conn.cursor()
+    
+    # Protect from SQL injection by using parameterized query
+    input_value = "%" + user_input + "%"
+    cursor.execute("SELECT * FROM users WHERE age > ?", (input_value,))
+    rows = cursor.fetchall()
+
+    for row in rows:
+        print(row)
+
+def main():
+    db_file = "my_database.db"  # replace with your database file name
+    conn = create_connection(db_file)
+    
+    user_input = input("Enter age: ")  # get user input
+
+    if conn is not None:
+        query_database(conn, user_input)
+        conn.close()
+
+if __name__ == '__main__':
+    main()
+```
+
+Here's a brief explanation of the code:
+
+1. We first import the necessary modules: `sqlite3` for database operations and `Error` to handle potential errors.
+2. The `create_connection()` function establishes a connection to the SQLite database file.
+3. The `query_database(conn, user_input)` function takes a connection object and a user input as arguments. It queries the database using the provided user input, which is sanitized by being wrapped in a parameterized query (`'? '`). This protects against SQL injection attacks.
+4. In the `main()` function, we get user input (in this case, an age), create a connection to the database, call the `query_database(conn, user_input)` function with the user input as an argument, and then close the connection.
+
+Remember to replace `"my_database.db"` with your actual SQLite database file name.

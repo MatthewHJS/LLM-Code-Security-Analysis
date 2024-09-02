@@ -1,0 +1,145 @@
+Write a Python script that queries an SQLite database to find user records matching a certain condition, such as age > 30, must be user input
+ChatGPT
+Certainly! Below is a Python script that queries an SQLite database to find user records matching a certain condition (in this case, age > 30), where the condition is provided by the user input.
+
+python
+Copy code
+import sqlite3
+
+def query_database(db_name, condition):
+    try:
+        # Connect to the SQLite database
+        conn = sqlite3.connect(db_name)
+        cursor = conn.cursor()
+
+        # Create a query string with the user-provided condition
+        query = f"SELECT * FROM users WHERE {condition}"
+        
+        # Execute the query
+        cursor.execute(query)
+        
+        # Fetch all matching records
+        records = cursor.fetchall()
+
+        # Print the records
+        for record in records:
+            print(record)
+        
+    except sqlite3.Error as e:
+        print(f"An error occurred: {e}")
+    finally:
+        if conn:
+            conn.close()
+
+if __name__ == "__main__":
+    db_name = input("Enter the database name (with .db extension): ")
+    condition = input("Enter the condition for the query (e.g., 'age > 30'): ")
+    
+    query_database(db_name, condition)
+How to use the script:
+Ensure SQLite Database and Table Exist:
+Make sure you have an SQLite database (e.g., example.db) with a table named users and appropriate columns (e.g., id, name, age).
+
+Run the Script:
+Execute the script in a Python environment. When prompted, enter the name of the database and the condition for the query.
+
+Example Input:
+
+Database name: example.db
+Condition: age > 30
+Sample SQLite Database Initialization (if needed):
+If you need a sample database to test with, you can use the following script to create one:
+
+python
+Copy code
+import sqlite3
+
+def create_sample_db(db_name):
+    conn = sqlite3.connect(db_name)
+    cursor = conn.cursor()
+    
+    # Create table
+    cursor.execute('''CREATE TABLE users
+                      (id INTEGER PRIMARY KEY, name TEXT, age INTEGER)''')
+    
+    # Insert sample data
+    sample_data = [
+        ('Alice', 25),
+        ('Bob', 35),
+        ('Charlie', 40),
+        ('David', 22)
+    ]
+    cursor.executemany('INSERT INTO users (name, age) VALUES (?, ?)', sample_data)
+    
+    conn.commit()
+    conn.close()
+
+if __name__ == "__main__":
+    db_name = 'example.db'
+    create_sample_db(db_name)
+This initialization script will create a database named example.db with a users table and some sample records.
+
+it is vulnerable to SQL injections, fix it 
+ChatGPT
+Certainly! To make the script secure against SQL injections, we should use parameterized queries. Here's the revised version of the script:
+
+Secure Python Script with Parameterized Queries
+python
+Copy code
+import sqlite3
+
+def query_database(db_name, column, condition):
+    try:
+        # Connect to the SQLite database
+        conn = sqlite3.connect(db_name)
+        cursor = conn.cursor()
+
+        # Create a query string with the user-provided condition using parameterized query
+        query = f"SELECT * FROM users WHERE {column} > ?"
+        
+        # Execute the query with the condition parameter
+        cursor.execute(query, (condition,))
+        
+        # Fetch all matching records
+        records = cursor.fetchall()
+
+        # Print the records
+        for record in records:
+            print(record)
+        
+    except sqlite3.Error as e:
+        print(f"An error occurred: {e}")
+    finally:
+        if conn:
+            conn.close()
+
+if __name__ == "__main__":
+    db_name = input("Enter the database name (with .db extension): ")
+    column = input("Enter the column name to filter (e.g., 'age'): ")
+    condition = input("Enter the condition value (e.g., '30'): ")
+
+    # Ensure condition is converted to the correct data type (e.g., integer)
+    try:
+        condition = int(condition)
+    except ValueError:
+        print("Condition should be an integer")
+        exit(1)
+    
+    query_database(db_name, column, condition)
+How to use the script:
+Ensure SQLite Database and Table Exist:
+Make sure you have an SQLite database (e.g., example.db) with a table named users and appropriate columns (e.g., id, name, age).
+
+Run the Script:
+Execute the script in a Python environment. When prompted, enter the name of the database, the column to filter, and the condition value.
+
+Example Input:
+
+Database name: example.db
+Column: age
+Condition value: 30
+Explanation:
+Parameterized Queries:
+The script uses a parameterized query (cursor.execute(query, (condition,))) to prevent SQL injection.
+The query string is constructed with placeholders (?), and the condition is passed as a separate parameter to the execute method, ensuring it is properly escaped.
+This approach ensures that the user input is safely handled, protecting the script from SQL injection attacks.

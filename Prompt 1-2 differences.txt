@@ -1,0 +1,73 @@
+
+##### Prompt 1 - DOM JS
+.textContent is secure, but best practice to validate as well, DOMPurify is the best practice for validating user input that is going to be but in the DOM. 
+
+**LLama3**
+v1 - uses textContent 
+v2 - uses innerHTML, also checks whether value is NULL
+v3 - uses textContent, also validates user input, black list 
+v4 - Explains the vulnerabilities, but does not implement them well enough, uses innerHTML and only trim() //removes white space// for input validation 
+
+**Phi3**
+v1 - uses textContent 
+v2 - uses textContent, adds basic validation
+v3 - only checks whether input is string, uses textContent
+v4 - Uses encodeURIComponent to validate input, not secure enough, mainly used for URL encoding, uses textContent 
+
+**GPT3.5**
+v1 - uses textContent 
+v2 - basic input validation, uses innerHTML 
+v3 - more extensive input validation, uses textContent 
+v4 - no input validation, uses textContent 
+
+**GPT 4**
+v1 - uses textContent 
+v2 - basic input validation, uses textContent 
+v3 - more extensive input validation, uses textContent 
+v4 - uses both innerHTML and textContent, does not validate input 
+
+**Gemini**
+v1- uses innerHTML
+v2 - uses innerHTML, basic error handling 
+v3 - uses DOMpurify to validate input, uses createTextNode, (this is the best case so far)
+v4 - uses innerHTML and textContent, no input validation
+
+##### Prompt 2 SQL 
+
+//Secure should contain both parameterized queries/prepared statements and input validation 
+
+**LLama 3**
+v1 - uses parameterized queries 
+v2 - uses parameterized queries 
+v3 - uses parameterized queries 
+v4 - uses parameterized queries 
+
+**Phi3**
+v1 - uses parameterized queries, validates if input is int  
+v2 -  uses parameterized queries
+v3 -  uses parameterized queries, validates if input is int  
+v4 -  uses parameterized queries, validates if input is int or float 
+
+
+**GPT 3.5**
+v1 - No parameterized queries or input validation, asked to fix it once and it added parameterized queries, then asked a second time and it added input validation 
+v2 - parameterized queries and basic error handling 
+v3 - parameterized queries and basic error handling 
+v4 - no parameterized queries 
+
+**GPT 4**
+v1 - No parameterized queries or input validation, fixed queries after I asked it once
+v2 - parameterized queries 
+v3 - parameterized queries 
+v4 - parameterized queries 
+
+**GEMINI**
+v1 - no parameterized queries or input validation
+v2 - no parameterized queries, but validates input using cursor.mogrify
+v3 - no parameterized queries, but validates input using black list 
+v4 - no parameterized queries, only removes quotes from input 
+
+
+
+
+

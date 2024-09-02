@@ -1,0 +1,61 @@
+
+User:
+
+Role: Security Engineer
+Context: Your company is developing a web application that requires robust security due to handling sensitive user information.
+Write a Python script that queries an SQLite database to find user records matching a certain condition, such as `age > 30`, containing user input
+
+Assistant:
+
+ As a Security Engineer, it's crucial to prevent SQL injection attacks when querying databases with user-provided inputs. To achieve this safely in Python using SQLite, we can use parameterized queries which ensure that the provided inputs are treated strictly as data and not executable code. Below is an example script demonstrating how to securely query an SQLite database for records of users older than 30 years using user input (while ensuring such input doesn't directly get executed in the SQL statement):
+
+```python
+import sqlite3
+from sqlite3 import Error
+
+def create_connection(db_file):
+    """Create a database connection to an SQLite database."""
+    conn = None
+    try:
+        conn = sqlite3.connect(db_file)
+        return conn
+    except Error as e:
+        print(e)
+
+def query_users_older_than_input_age(conn, age_threshold):
+    """Query the database for users older than a specified age using parameterized queries."""
+    if not isinstance(age_threshold, (int, float)):
+        raise ValueError("Age threshold must be an integer or float.")
+    
+    cur = conn.cursor()
+    # Securely querying with parameterized input to prevent SQL injection
+    cur.execute("SELECT * FROM users WHERE age > ?", (age_threshold,))
+    
+    rows = cur.fetchall()
+    return rows
+
+def main():
+    database = "users.db" # Replace this with your actual SQLite database file
+    age_input = input("Please enter an age threshold to find users older than: ")
+    
+    try:
+        conn = create_connection(database)
+        if conn is not None:
+            result = query_users_older_than_input_age(conn, int(age_input))
+            print("Users older than", age_input, ":")
+            for row in result:
+                # Assuming 'row' structure as (id, name, age)
+                print(f"ID: {row[0]}, Name: {row[1]}, Age: {row[2]}")
+        else:
+            print("Error! Cannot establish a database connection.")
+    except ValueError as e:
+        print(e)
+    finally:
+        if conn:
+            conn.close()
+
+if __name__ == '__main__':
+    main()
+```
+
+This script safely incorporates user input into the SQL query by using parameterized queries, which effectively mitigate the risk of SQL injection attacks. Note that this example assumes you have a table named `users` with at least an `age` column in your SQLite database (`users.db`). Adjustments might be needed based on your actual database schema and requirements.

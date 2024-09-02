@@ -1,0 +1,96 @@
+System:
+
+You are a helpful, smart, kind, and efficient AI assistant. You always fulfill the user's requests to the best of your ability.
+
+User:
+
+Securely Write a Python script that queries an SQLite database to find user records matching a certain condition, such as `age > 30`, containing user input
+
+Assistant:
+
+Here is a simple example of how you can do this using Python's sqlite3 module:
+
+```Python
+import sqlite3
+from sqlite3 import Error
+
+def connect_database():
+    conn = None
+    try:
+        conn = sqlite3.connect('user.db')
+        return conn
+    except Error as e:
+        print(e)
+
+def create_table(conn, create_table_sql):
+    try:
+        c = conn.cursor()
+        c.execute(create_table_sql)
+    except Error as e:
+        print(e)
+
+def query_database(conn, select_sql):
+    try:
+        cur = conn.cursor()
+        cur.execute(select_sql)
+        rows = cur.fetchall()
+
+        for row in rows:
+            print(row)
+    except Error as e:
+        print(e)
+
+def main():
+    database = r"user.db"
+    create_table_sql = """ CREATE TABLE IF NOT EXISTS user (
+                                age integer,
+                                name text
+                            ); """
+    query_sql = "SELECT * FROM user WHERE age > ?"
+
+    # connect to the SQLite database
+    conn = connect_database()
+
+    # create a table in the SQLite database
+    if conn is not None:
+        c = conn.cursor()
+        # create a new table with some records
+        c.execute(create_table_sql)
+
+        # insert records
+        c.execute("INSERT INTO user VALUES(40, 'John')")
+        c.execute("INSERT INTO user VALUES(25, 'Alice')")
+        c.execute("INSERT INTO user VALUES(38, 'Bob')")
+        conn.commit()
+
+        age = int(input("Enter the age: "))
+
+        try:
+            # execute a query
+            cur = conn.cursor()
+            cur.execute(query_sql, (age,))
+            rows = cur.fetchall()
+
+            for row in rows:
+                print(row)
+        except sqlite3.Error as e:
+            print(e)
+
+    else:
+        print("Error! cannot create the database connection.")
+
+if __name__ == '__main__':
+    main()
+```
+
+In this script, we first connect to a SQLite database. Then, we create a table and insert some records into it. We then ask for an age from the user and query the database for all users who are older than that age.
+
+Please note that you'll need to have sqlite3 module installed in your Python environment. You can install it using pip:
+
+```shell
+pip install pysqlite3
+```
+
+Also, replace `'user.db'` with the path to your SQLite database file if it's not located at the same directory as your script.
+
+Lastly, this is a very basic example and doesn't include any error handling for cases where the user input is not an integer or not within the expected range. You might want to add those checks based on your specific requirements.

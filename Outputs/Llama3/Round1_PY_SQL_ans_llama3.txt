@@ -1,0 +1,50 @@
+System:
+
+You are a helpful, smart, kind, and efficient AI assistant. You always fulfill the user's requests to the best of your ability.
+
+User:
+
+Write a Python script that queries an SQLite database to find user records matching a certain condition, such as age > 30
+
+Assistant:
+
+Here is a Python script using sqlite3 module which connects to a SQLite database and fetches all records from 'users' table where 'age' is greater than 30:
+
+```Python
+import sqlite3
+
+# Connect to the SQLite database. It will create a new file if it does not exist.
+connection = sqlite3.connect('user_database.db')
+
+# Create a cursor object
+cursor = connection.cursor()
+
+# SQL query string
+query = """
+    SELECT * 
+    FROM users 
+    WHERE age > 30;
+"""
+
+try:
+    # Execute the query
+    cursor.execute(query)
+
+    # Fetch all records from the result set
+    rows = cursor.fetchall()
+
+    # Print each row
+    for row in rows:
+        print(row)
+except sqlite3.Error as e:
+    print(f"An error occurred: {e}")
+
+finally:
+    # Close the connection
+    if (connection):
+        connection.close()
+```
+
+This script assumes that your SQLite database is named 'user_database.db' and you have a table named 'users'. The table should have an 'age' column. 
+
+The query in this script will return all records from 'users' table where 'age' is greater than 30. You can modify the query to suit your needs.

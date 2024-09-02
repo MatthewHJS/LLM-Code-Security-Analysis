@@ -1,0 +1,39 @@
+Sure, here's a Python script that queries an SQLite database to find user records matching a certain condition and protects against SQL injections using parameterized queries:
+
+python
+Copy code
+import sqlite3
+
+def search_users(age_condition):
+    try:
+        conn = sqlite3.connect('users.db')
+        c = conn.cursor()
+
+        # Using parameterized query to prevent SQL injection
+        c.execute("SELECT * FROM users WHERE age > ?", (age_condition,))
+        rows = c.fetchall()
+
+        for row in rows:
+            print(row)
+
+    except sqlite3.Error as e:
+        print("Error:", e)
+
+    finally:
+        if conn:
+            conn.close()
+
+if __name__ == "__main__":
+    age_input = input("Enter the minimum age to search users: ")
+    try:
+        age_condition = int(age_input)
+        search_users(age_condition)
+    except ValueError:
+        print("Please enter a valid integer for age.")
+Make sure you have an SQLite database file named users.db with a table named users containing columns name and age at the same directory as this script. You can modify the query and table/column names according to your database schema.
+
+
+
+
+
+

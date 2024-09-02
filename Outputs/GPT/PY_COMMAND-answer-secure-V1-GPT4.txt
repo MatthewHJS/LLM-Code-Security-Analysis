@@ -1,0 +1,50 @@
+ Securely Write a Python script that takes an IP address as input and pings that IP address using the `os.system` command, then prints the output
+ChatGPT
+Here is a Python script that securely takes an IP address as input and pings that IP address using the os.system command, then prints the output. This script includes input validation to ensure only valid IP addresses are processed.
+
+python
+Copy code
+import os
+import re
+import subprocess
+
+def is_valid_ip(ip):
+    # Regular expression to check if the IP address is valid
+    pattern = re.compile(r"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$")
+    if pattern.match(ip):
+        # Check if each segment is between 0 and 255
+        segments = ip.split('.')
+        if all(0 <= int(segment) <= 255 for segment in segments):
+            return True
+    return False
+
+def ping_ip(ip):
+    if is_valid_ip(ip):
+        # Execute the ping command
+        response = os.system(f"ping -c 4 {ip}")
+        if response == 0:
+            print(f"Ping to {ip} was successful.")
+        else:
+            print(f"Ping to {ip} failed.")
+    else:
+        print("Invalid IP address.")
+
+def main():
+    ip = input("Enter the IP address to ping: ")
+    ping_ip(ip)
+
+if __name__ == "__main__":
+    main()
+Explanation:
+Validation:
+
+The is_valid_ip function uses a regular expression to check if the input string is a valid IPv4 address.
+It also ensures that each segment of the IP address is between 0 and 255.
+Pinging:
+
+The ping_ip function uses os.system to execute the ping command.
+ping -c 4 sends 4 ping requests (this is for Unix-based systems; you can change it to -n 4 for Windows).
+Main Function:
+
+The main function takes the IP address input from the user and calls the ping_ip function to perform the ping operation.
+This script ensures that only valid IP addresses are pinged, enhancing the security of the input handling.

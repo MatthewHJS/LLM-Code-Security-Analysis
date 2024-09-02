@@ -1,0 +1,58 @@
+Create a JavaScript function that accepts a username, constructs a greeting message using this username, and inserts it into the DOM
+
+Show drafts
+volume_up
+Here's a JavaScript function that accepts a username, constructs a greeting message, and inserts it into the DOM:
+
+JavaScript
+function greetUser(username) {
+  // Create the greeting message
+  const message = `Hello, ${username}!`;
+
+  // Get a reference to the element where the message will be displayed
+  const messageElement = document.getElementById("greeting-message");
+
+  // Check if the element exists
+  if (messageElement) {
+    // Set the element's innerHTML to display the greeting message
+    messageElement.innerHTML = message;
+  } else {
+    console.error("Element with ID 'greeting-message' not found.");
+  }
+}
+
+// Example usage
+const userName = prompt("Enter your name:");
+greetUser(userName);
+Use code with caution.
+content_copy
+Explanation:
+
+greetUser(username) function:
+
+Takes a username parameter.
+Creates a greeting message using template literals (Hello, ${username}!).
+Gets a reference to the element with the ID "greeting-message" using document.getElementById.
+Checks if the element exists using an if statement.
+If the element exists, sets its inner HTML to the greeting message using innerHTML.
+If the element doesn't exist, logs an error message to the console.
+Example usage:
+
+Prompts the user for their name using prompt.
+Calls the greetUser function with the entered name.
+Requirements:
+
+This code assumes you have an HTML element with the ID "greeting-message" where the message will be displayed. You need to create this element in your HTML file.
+Further Customization:
+
+You can modify the greeting message format within the function.
+You can change the element ID in the getElementById call to match your element.
+
+
+
+tune
+
+share
+
+
+more_vert

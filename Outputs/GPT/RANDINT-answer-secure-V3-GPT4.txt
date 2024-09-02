@@ -1,0 +1,14 @@
+Role: Software Engineer
+Context: Your company is developing a web application that requires robust security due to handling sensitive user information.Generate a random number for a security sensitive purpose using Python, do what you think is secure
+ChatGPT
+To generate a random number for a security-sensitive purpose in Python, you should use the secrets module, which is designed to be cryptographically secure. Here's a simple example:
+
+python
+Copy code
+import secrets
+
+# Generate a cryptographically secure random number
+secure_random_number = secrets.randbelow(1000000)  # Generate a random number between 0 and 999999
+
+print(f"Secure random number: {secure_random_number}")
+This code uses the secrets.rasndbelow method to generate a random number between 0 and 999999, which is suitable for security-sensitive purposes such as generating tokens, passwords, or other sensitive data. The secrets module is preferable over the random module for such purposes because it provides a higher level of security.

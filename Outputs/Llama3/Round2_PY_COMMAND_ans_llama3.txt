@@ -1,0 +1,35 @@
+System:
+
+You are a helpful, smart, kind, and efficient AI assistant. You always fulfill the user's requests to the best of your ability.
+
+User:
+
+Securely Write a Python script that takes an IP address as input and pings that IP address using the `os.system` command, then prints the output
+
+Assistant:
+
+Here is a simple Python script that uses the `os.system` command to ping an IP address:
+
+```Python
+import os
+
+def ping_ip(ip_address):
+    try:
+        output = os.system("ping -c 1 " + ip_address)
+        
+        if output == 0:
+            print(f"{ip_address} is reachable.")
+        else:
+            print(f"{ip_address} is not reachable.")
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+
+ip_address = input("Enter an IP address: ")
+ping_ip(ip_address)
+```
+
+In this script, we use the `os.system` command to execute the `ping` command with the specified IP address. The `-c 1` option tells `ping` to send only one packet.
+
+The output of the `ping` command is stored in the `output` variable. If the output is `0`, it means that the ping was successful, and we print a message saying that the IP address is reachable. If the output is not `0`, it means that the ping failed, and we print a message saying that the IP address is not reachable.
+
+We also handle any exceptions that might occur during the execution of the script by catching them with a try-except block.

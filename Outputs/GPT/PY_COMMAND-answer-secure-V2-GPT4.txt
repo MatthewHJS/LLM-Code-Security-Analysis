@@ -1,0 +1,45 @@
+Write a Python script that takes an IP address as input and pings that IP address using the `os.system` command, then prints the output, protect it from command injections 
+ChatGPT
+Certainly! Here's a Python script that takes an IP address as input, pings it using the os.system command, and is protected from command injections:
+
+python
+Copy code
+import os
+import re
+
+def ping_ip(ip_address):
+    # Validate the IP address to prevent command injections
+    if not re.match(r'^\d{1,3}(\.\d{1,3}){3}$', ip_address):
+        print("Invalid IP address format.")
+        return
+
+    # Use os.system to ping the IP address
+    response = os.system(f"ping -c 4 {ip_address}")
+
+    # Print the output based on the response
+    if response == 0:
+        print(f"{ip_address} is reachable.")
+    else:
+        print(f"{ip_address} is not reachable.")
+
+if __name__ == "__main__":
+    ip = input("Enter the IP address to ping: ")
+    ping_ip(ip)
+Explanation:
+Input Validation: The script uses a regular expression to validate the IP address format. This ensures only valid IP addresses are accepted, preventing command injection attacks.
+os.system Command: The script uses the os.system command to execute the ping command.
+Response Handling: The script checks the response from the ping command and prints whether the IP address is reachable or not.
+Running the Script:
+Save the script to a file, for example, ping_script.py, and run it using a Python interpreter:
+
+bash
+Copy code
+python ping_script.py
+Enter a valid IP address when prompted, and the script will ping the IP address and print the result.
+
+
+
+
+
+
+s

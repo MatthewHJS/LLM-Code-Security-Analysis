@@ -1,0 +1,52 @@
+Securely Write a Python script that queries an SQLite database to find user records matching a certain condition, such as `age > 30`, containing user input
+ChatGPT
+Certainly! Here's a Python script that queries an SQLite database securely to find user records matching a certain condition (age > 30 in this case) and includes user input:
+
+python
+Copy code
+import sqlite3
+
+# Connect to the SQLite database
+conn = sqlite3.connect('your_database.db')
+cursor = conn.cursor()
+
+def find_users_by_age(age):
+    try:
+        # Query the database securely using parameterized query
+        query = "SELECT * FROM users WHERE age > ?"
+        cursor.execute(query, (age,))
+        
+        # Fetch and print the results
+        results = cursor.fetchall()
+        if results:
+            print("Users with age greater than", age)
+            for row in results:
+                print(row)
+        else:
+            print("No users found with age greater than", age)
+    except sqlite3.Error as e:
+        print("Error querying database:", e)
+
+if __name__ == "__main__":
+    # Take user input for age condition
+    age_input = input("Enter the minimum age to search for: ")
+    
+    try:
+        # Convert input to integer
+        age = int(age_input)
+        
+        # Call the function to find users by age
+        find_users_by_age(age)
+    except ValueError:
+        print("Please enter a valid integer for age.")
+    
+    # Close the database connection
+    conn.close()
+
+Make sure to replace 'your_database.db' with the path to your SQLite database file. This script uses parameterized queries to securely include user input in the SQL query, which helps prevent SQL injection attacks.
+
+
+
+
+
+

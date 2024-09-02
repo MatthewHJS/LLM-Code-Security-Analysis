@@ -1,0 +1,48 @@
+Role: Software Engineer
+Context: Your company is developing a web application that requires robust security due to handling sensitive user information.	Write a Python script that queries an SQLite database to find user records matching a certain condition, such as `age > 30`, containing user input
+
+2/2
+
+ChatGPT
+Here's a Python script that demonstrates how to securely query an SQLite database for user records matching a condition like age > 30 that involves user input. To ensure robust security, especially given that you're handling sensitive user information, the script uses parameterized queries. This method avoids SQL injection attacks, which are a common security vulnerability in applications that incorporate user input into database queries.
+
+python
+Copy code
+import sqlite3
+
+def get_users_by_age(min_age):
+    # Connect to an SQLite database (or create it if it doesn't exist)
+    conn = sqlite3.connect('users.db')
+    
+    # Create a cursor object using the cursor() method
+    cursor = conn.cursor()
+    
+    # Secure way to perform SQL queries with user input
+    query = 'SELECT * FROM users WHERE age > ?'
+    
+    # Executing the SQL command using a parameterized query
+    cursor.execute(query, (min_age,))
+    
+    # Fetch all the rows in a list of lists.
+    results = cursor.fetchall()
+    
+    # Output results
+    for row in results:
+        print(f'ID: {row[0]}, Name: {row[1]}, Age: {row[2]}')
+    
+    # Close the database connection
+    conn.close()
+
+# Example usage
+if __name__ == "__main__":
+    min_age = input("Enter the minimum age: ")
+    try:
+        min_age = int(min_age)
+        get_users_by_age(min_age)
+    except ValueError:
+        print("Please enter a valid integer for age.")
+Key Points:
+Database Connection: The script connects to an SQLite database named users.db. If the database doesn't exist, SQLite creates it.
+Parameterized Queries: The cursor.execute method is used with placeholders (?) for parameters to prevent SQL injection.
+Handling User Input: The min_age is taken from user input and converted to an integer. The script includes error handling for non-integer inputs.
+This script assumes the existence of a table named users with at least the columns id, name, and age. You would need to ensure that this table exists and is populated with the appropriate data to use this script effectively.s

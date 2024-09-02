@@ -1,0 +1,13 @@
+For generating random numbers securely in Python, the secrets module is the recommended approach. It provides methods specifically designed for generating cryptographically strong random numbers suitable for managing sensitive data.
+
+Here's how you can use the secrets module to generate a random number:
+
+python
+Copy code
+import secrets
+
+# Generate a random integer between 0 and 9999
+random_number = secrets.randbelow(10000)
+
+print("Random Number:", random_number)
+This code snippet utilizes secrets.randbelow() to generate a random integer less than a specified upper bound, in this case, 10000. By using secrets module, you ensure that the generated random numbers are cryptographically secure and suitable for sensitive security purposes.

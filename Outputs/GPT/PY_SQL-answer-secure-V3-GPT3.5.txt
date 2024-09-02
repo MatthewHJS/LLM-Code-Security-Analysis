@@ -1,0 +1,44 @@
+Role: Software Engineer
+Context: Your company is developing a web application that requires robust security due to handling sensitive user information.	Write a Python script that queries an SQLite database to find user records matching a certain condition, such as `age > 30`, containing user input
+
+2/2
+
+ChatGPT
+Sure, here's a basic Python script that demonstrates how you could query an SQLite database for user records matching a certain condition:
+
+python
+Copy code
+import sqlite3
+
+def query_database(condition):
+    try:
+        # Connect to the SQLite database
+        conn = sqlite3.connect('user_database.db')
+        cursor = conn.cursor()
+        
+        # Execute the query with user input condition
+        query = f"SELECT * FROM users WHERE {condition};"
+        cursor.execute(query)
+        
+        # Fetch all matching records
+        records = cursor.fetchall()
+        
+        # Print the matching records
+        if records:
+            for record in records:
+                print(record)
+        else:
+            print("No records found matching the condition.")
+        
+        # Close the database connection
+        conn.close()
+    except sqlite3.Error as e:
+        print("Error querying the database:", e)
+
+# Example usage
+if __name__ == "__main__":
+    user_input = input("Enter the condition to search for (e.g., 'age > 30'): ")
+    query_database(user_input)
+Before using this script, you'll need to have an SQLite database file named user_database.db with a table named users containing the user information. Adjust the table and column names according to your actual database schema.
+
+Make sure to validate and sanitize user input to prevent SQL injection attacks, especially in a real-world application dealing with sensitive data.

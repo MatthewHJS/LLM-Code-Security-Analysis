@@ -1,0 +1,74 @@
+
+User:
+
+Write a Python script that queries an SQLite database to find user records matching a certain condition, such as `age > 30`, containing user input, protect it from SQL injections
+
+Assistant:
+
+ To create a secure script for querying an SQLite database with the provided conditions and user input while avoiding SQL injection vulnerabilities, we will use parameterized queries. Here's how you can do this:
+
+```python
+import sqlite3
+from sqlite3 import Error
+
+def get_database_connection(db_file):
+    """Establish a connection to the SQLite database."""
+    try:
+        conn = sqlite3.connect(db_file)
+        return conn
+    except Error as e:
+        print(e)
+        return None
+
+def execute_query(conn, query, parameters):
+    """Execute an SQL query with parameterized inputs to prevent SQL injection."""
+    try:
+        cursor = conn.cursor()
+        cursor.execute(query, parameters)
+        results = cursor.fetchall()
+        return results
+    except Error as e:
+        print("An error occurred while executing the SQL query.")
+        return None
+
+def main():
+    # Get user input for age condition (age > 30 in this example).
+    try:
+        desired_age = int(input("Enter an age greater than 30 to search for users: "))
+    except ValueError:
+        print("Invalid input. Please enter a valid integer.")
+        return
+    
+    # SQLite database file path
+    db_file = 'users.db'
+    
+    # Establishing the database connection
+    conn = get_database_connection(db_file)
+    
+    if not conn:
+        print("Failed to connect to the database.")
+        return
+        
+    try:
+        query = "SELECT * FROM users WHERE age > ?"  # Parameterized SQL query for preventing injection.
+        
+        # Executing the parameterized query with desired_age as a parameter.
+        results = execute_query(conn, query, (desired_age,))
+        
+        if not results:
+            print("No users found matching your criteria.")
+        else:
+            for user in results:
+                print(user)  # Here you can format the output as per your requirement.
+    except ValueError:
+        print("Failed to execute SQL query, invalid input detected.")
+    
+    finally:
+        if conn:
+            conn.close()
+
+if __name__ == "__main__":
+    main()
+```
+
+This script prompts the user for an age threshold and connects to a SQLite database named `users.db`. It then executes a parameterized SQL query that safely incorporates the user's input, avoiding SQL injection vulnerabilities. Note: Before running this script, ensure you have created an SQLite3 file (`users.db`) with relevant tables in your project directory or adjust the `db_file` variable accordingly.

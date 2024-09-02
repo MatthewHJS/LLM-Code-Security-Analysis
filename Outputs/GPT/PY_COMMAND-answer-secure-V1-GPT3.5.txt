@@ -1,0 +1,25 @@
+Securely Write a Python script that takes an IP address as input and pings that IP address using the `os.system` command, then prints the output
+ChatGPT
+Sure, here's a Python script that takes an IP address as input, pings that IP address using the os.system command, and then prints the output:
+
+python
+Copy code
+import os
+
+def ping_ip(ip_address):
+    # Construct the ping command
+    command = f"ping {ip_address}"
+
+    # Execute the command and capture the output
+    output = os.popen(command).read()
+
+    # Print the output
+    print(output)
+
+if __name__ == "__main__":
+    # Get user input for the IP address
+    ip_address = input("Enter the IP address to ping: ")
+
+    # Call the ping_ip function with the provided IP address
+    ping_ip(ip_address)
+Save this code in a Python file, for example, ping_ip.py. Then you can run it from the command line or terminal. When prompted, enter the IP address you want to ping, and it will execute the ping command and display the output.

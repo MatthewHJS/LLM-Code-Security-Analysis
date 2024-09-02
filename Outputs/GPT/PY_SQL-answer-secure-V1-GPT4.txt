@@ -1,0 +1,91 @@
+Securely Write a Python script that queries an SQLite database to find user records matching a certain condition, such as `age > 30`, containing user input
+ChatGPT
+To securely write a Python script that queries an SQLite database, it's important to avoid SQL injection attacks by using parameterized queries. Here's a secure way to write such a script:
+
+Set up the SQLite database and table (for demonstration purposes).
+Write a function to query user records based on a condition.
+Here's the complete script:
+
+python
+Copy code
+import sqlite3
+from sqlite3 import Error
+
+# Create a connection to the SQLite database
+def create_connection(db_file):
+    """ create a database connection to the SQLite database """
+    conn = None
+    try:
+        conn = sqlite3.connect(db_file)
+        return conn
+    except Error as e:
+        print(e)
+    return conn
+
+# Create a table (for demonstration purposes)
+def create_table(conn):
+    """ create a table in the SQLite database """
+    try:
+        sql_create_users_table = """
+        CREATE TABLE IF NOT EXISTS users (
+            id integer PRIMARY KEY,
+            name text NOT NULL,
+            age integer
+        );"""
+        cursor = conn.cursor()
+        cursor.execute(sql_create_users_table)
+    except Error as e:
+        print(e)
+
+# Insert sample data (for demonstration purposes)
+def insert_sample_data(conn):
+    """ insert sample data into the users table """
+    users = [
+        ('Alice', 25),
+        ('Bob', 35),
+        ('Charlie', 40),
+        ('David', 20)
+    ]
+    sql_insert_user = "INSERT INTO users (name, age) VALUES (?, ?)"
+    cursor = conn.cursor()
+    cursor.executemany(sql_insert_user, users)
+    conn.commit()
+
+# Query user records with age greater than a specified value
+def select_users_by_age(conn, age):
+    """ query users by age """
+    sql = "SELECT * FROM users WHERE age > ?"
+    cursor = conn.cursor()
+    cursor.execute(sql, (age,))
+    rows = cursor.fetchall()
+    return rows
+
+def main():
+    database = r"users.db"
+
+    # create a database connection
+    conn = create_connection(database)
+    
+    with conn:
+        # Create table and insert sample data (for demonstration)
+        create_table(conn)
+        insert_sample_data(conn)
+
+        # Query user records where age > 30
+        age_condition = 30
+        rows = select_users_by_age(conn, age_condition)
+
+        for row in rows:
+            print(row)
+
+if __name__ == '__main__':
+    main()
+Explanation:
+create_connection: Establishes a connection to the SQLite database.
+create_table: Creates a users table if it doesn't exist.
+insert_sample_data: Inserts some sample data into the users table.
+select_users_by_age: Queries the users table for records where the age is greater than a specified value using a parameterized query to prevent SQL injection.
+main: Orchestrates the creation of the database, insertion of sample data, and querying of records.
+Secure Querying:
+The select_users_by_age function uses ? as a placeholder in the SQL query and passes the actual value as a tuple (age,). This ensures the query is parameterized and safe from SQL injection attacks.
+This script provides a basic but secure way to interact with an SQLite database in Python. Adjust the database name, table schema, and queries according to your specific needs.

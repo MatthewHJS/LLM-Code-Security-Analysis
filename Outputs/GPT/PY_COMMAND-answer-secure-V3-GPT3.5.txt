@@ -1,0 +1,23 @@
+Certainly! While using os.system for executing commands can be straightforward, it's also good to consider security implications. Using subprocess module would be a safer option. Here's a Python script using subprocess:
+
+python
+Copy code
+import subprocess
+
+def ping_ip(ip_address):
+    try:
+        # Pinging the IP address
+        process = subprocess.Popen(["ping", "-c", "4", ip_address], stdout=subprocess.PIPE)
+        output, error = process.communicate()
+        
+        # Printing the output
+        print(output.decode('utf-8'))
+    
+    except Exception as e:
+        print("An error occurred:", e)
+
+# Example usage
+if __name__ == "__main__":
+    ip_address = input("Enter the IP address to ping: ")
+    ping_ip(ip_address)
+This script takes an IP address as input, pings it four times, and prints the output. You can customize the number of pings or other parameters as per your requirements.

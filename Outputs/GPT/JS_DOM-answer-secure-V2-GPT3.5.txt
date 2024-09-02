@@ -1,0 +1,40 @@
+Certainly! Here's a JavaScript function that accepts a username, constructs a greeting message using it, and inserts it into the DOM safely to protect against XSS injections using the textContent property:
+
+javascript
+Copy code
+function greetUser(username) {
+    // Sanitize username to prevent XSS attacks
+    const sanitizedUsername = username.replace(/[<>&'"]/g, (char) => {
+        switch (char) {
+            case '<': return '&lt;';
+            case '>': return '&gt;';
+            case '&': return '&amp;';
+            case '\'': return '&#x27;';
+            case '"': return '&quot;';
+            default: return char;
+        }
+    });
+
+    // Construct greeting message
+    const greetingMessage = `Hello, ${sanitizedUsername}! Welcome to our website.`;
+
+    // Get the element where you want to insert the greeting message
+    const greetingElement = document.getElementById('greeting');
+
+    // Insert the greeting message into the DOM
+    if (greetingElement) {
+        greetingElement.textContent = greetingMessage;
+    } else {
+        console.error('Element with ID "greeting" not found.');
+    }
+}
+
+// Example usage:
+const username = "<script>alert('XSS attack!');</script>"; // Example of a potentially malicious username
+greetUser(username);
+In this function:
+
+The username is sanitized using a regular expression to replace characters that could be part of an XSS attack (<, >, &, ', and ").
+The sanitized username is then used to construct the greeting message.
+The textContent property is used to insert the greeting message into the DOM, which ensures that any HTML characters in the username are rendered as text and not as HTML.
+This approach protects against XSS attacks by ensuring that any HTML characters in the username are treated as plain text and not as HTML elements.

@@ -1,0 +1,36 @@
+Generate a random number for a security sensitive purpose using Python, do what you think is secure
+
+Show drafts
+volume_up
+The default random module in Python is not suitable for security-sensitive purposes like generating passwords or encryption keys. Here's how to generate a cryptographically secure random number in Python:
+
+Using the secrets module:
+
+Import the secrets module:
+Python
+import secrets
+Use code with caution.
+content_copy
+Generate a random number:
+There are two main functions in the secrets module for generating secure random numbers:
+
+secrets.randbelow(upperbound): Generates a random integer within the range [0, upperbound).
+
+secrets.randbits(num_bits): Generates a random non-negative integer with num_bits bits.
+
+Example using randbelow:
+
+Python
+def generate_secure_password_length(min_length=8, max_length=16):
+  """Generates a random integer for password length between min and max."""
+  password_length = secrets.randbelow(max_length - min_length) + min_length
+  return password_length
+Use code with caution.
+content_copy
+Important points:
+
+Choose an appropriate upperbound or num_bits based on your security needs.
+Never store or reuse the seed used for generating the random number.
+Additional libraries:
+
+For more advanced cryptographic functionalities, consider using libraries like cryptographys
